@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: MIT
+﻿// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
 /// @title Voting - multi-election decentralized voting (starter version)
@@ -131,7 +131,7 @@ contract Voting {
 
     // ---------------- Views ----------------
 
-    /// @return status 0 = upcoming, 1 = active, 2 = ended
+    /// @return 0 = upcoming, 1 = active, 2 = ended
     function getElection(uint256 electionId)
         external
         view
