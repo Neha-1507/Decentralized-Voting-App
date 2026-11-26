@@ -71,3 +71,9 @@ Testnet (Polygon Amoy): copy `.env.example` to `.env`, fill `PRIVATE_KEY`, then 
 
 - Generates verifiable vote receipt payloads and QR codes (qrVerification.js).
 - Includes an interactive receipt verifier and anomaly detector (fraudAlerts.js, SecurityPanel.jsx).
+
+## Anonymous Voting — Commit-Reveal Scheme (Part 6)
+
+- Uses a two-phase commit-reveal design (anonymousVote.js) to prevent early tally bias.
+- Commit phase hashes (electionId, candidateId, secret, voterAddress) using keccak256.
+- Reveal phase verifies the salt and tallies the vote on-chain.
