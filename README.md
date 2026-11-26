@@ -66,3 +66,8 @@ Testnet (Polygon Amoy): copy `.env.example` to `.env`, fill `PRIVATE_KEY`, then 
 - Pinata upload (`uploadFileToPinata` / `uploadJsonToPinata`) is optional for quick demos; admins can also paste an existing `ipfs://` URI or CID directly.
 - Candidate profile viewer (`CandidateProfile.jsx`) resolves `ipfs://` metadata and candidate photos via `ipfsToHttp`.
 - Note: Avoid committing live secret tokens or exposing high-privilege keys in browser bundles for production.
+
+## QR Verification & Fraud Alerts (Part 7)
+
+- Generates verifiable vote receipt payloads and QR codes (qrVerification.js).
+- Includes an interactive receipt verifier and anomaly detector (fraudAlerts.js, SecurityPanel.jsx).
