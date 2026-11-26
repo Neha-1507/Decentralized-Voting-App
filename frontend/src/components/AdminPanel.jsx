@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { isAddress } from "ethers";
+import { useToast } from "./Toast.jsx";
 
 export default function AdminPanel({ contract, elections, onDone }) {
   const [title, setTitle] = useState("");
@@ -9,18 +10,17 @@ export default function AdminPanel({ contract, elections, onDone }) {
   const [candidate, setCandidate] = useState("");
   const [voters, setVoters] = useState("");
   const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState({ type: "", text: "" });
+  const toast = useToast();
 
   const run = async (fn, okText) => {
     try {
       setBusy(true);
-      setMsg({ type: "", text: "" });
       const tx = await fn();
       await tx.wait();
-      setMsg({ type: "info", text: okText });
+      toast.success(okText);
       onDone();
     } catch (e) {
-      setMsg({ type: "error", text: e.reason || e.shortMessage || e.message });
+      toast.error(e.reason || e.shortMessage || e.message);
     } finally {
       setBusy(false);
     }
@@ -38,7 +38,7 @@ export default function AdminPanel({ contract, elections, onDone }) {
   const registerVoters = () => {
     const list = voters.split(/[\s,]+/).filter(Boolean);
     const bad = list.find((a) => !isAddress(a));
-    if (bad) return setMsg({ type: "error", text: `Invalid address: ${bad}` });
+    if (bad) return toast.error(`Invalid address: ${bad}`);
     return run(() => contract.registerVoters(Number(electionId), list), `${list.length} voter(s) registered`);
   };
 
@@ -82,8 +82,6 @@ export default function AdminPanel({ contract, elections, onDone }) {
 
       <textarea rows={3} placeholder="Voter wallet addresses (comma / space / newline separated)" value={voters} onChange={(e) => setVoters(e.target.value)} />
       <button disabled={busy || electionId === "" || !voters} onClick={registerVoters}>Register voters</button>
-
-      {msg.text && <div className={msg.type}>{msg.text}</div>}
     </div>
   );
 }
