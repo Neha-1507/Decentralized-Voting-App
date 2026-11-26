@@ -59,3 +59,10 @@ Testnet (Polygon Amoy): copy `.env.example` to `.env`, fill `PRIVATE_KEY`, then 
 6. Part 6 - Anonymous voting (commit-reveal, then ZK / Semaphore)
 7. Part 7 - QR code voter verification, fraud/alert dashboard
 8. Part 8 - Deploy: contract on Polygon Amoy, frontend on Vercel/Netlify
+
+## IPFS Candidate Profile & Manifesto (Part 5)
+
+- Set `VITE_PINATA_JWT` and optional `VITE_IPFS_GATEWAY` in `frontend/.env` (see `frontend/.env.example`).
+- Pinata upload (`uploadFileToPinata` / `uploadJsonToPinata`) is optional for quick demos; admins can also paste an existing `ipfs://` URI or CID directly.
+- Candidate profile viewer (`CandidateProfile.jsx`) resolves `ipfs://` metadata and candidate photos via `ipfsToHttp`.
+- Note: Avoid committing live secret tokens or exposing high-privilege keys in browser bundles for production.
