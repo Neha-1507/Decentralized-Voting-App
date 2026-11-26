@@ -20,6 +20,7 @@ contract Voting {
 
     address public admin;
     uint256 public electionCount;
+    bool public paused;
 
     mapping(uint256 => Election) private elections;
     mapping(uint256 => Candidate[]) private candidates;
@@ -31,9 +32,16 @@ contract Voting {
     event VoterRegistered(uint256 indexed electionId, address voter);
     event VoteCast(uint256 indexed electionId, address indexed voter, uint256 candidateIndex);
     event AdminTransferred(address indexed previousAdmin, address indexed newAdmin);
+    event Paused(address account);
+    event Unpaused(address account);
 
     modifier onlyAdmin() {
         require(msg.sender == admin, "Only admin");
+        _;
+    }
+
+    modifier whenNotPaused() {
+        require(!paused, "Paused");
         _;
     }
 
@@ -88,6 +96,18 @@ contract Voting {
         }
     }
 
+    function pause() external onlyAdmin {
+        require(!paused, "Already paused");
+        paused = true;
+        emit Paused(msg.sender);
+    }
+
+    function unpause() external onlyAdmin {
+        require(paused, "Not paused");
+        paused = false;
+        emit Unpaused(msg.sender);
+    }
+
     function transferAdmin(address newAdmin) external onlyAdmin {
         require(newAdmin != address(0), "Zero address");
         emit AdminTransferred(admin, newAdmin);
@@ -96,7 +116,7 @@ contract Voting {
 
     // ---------------- Voting ----------------
 
-    function vote(uint256 electionId, uint256 candidateIndex) external electionExists(electionId) {
+    function vote(uint256 electionId, uint256 candidateIndex) external electionExists(electionId) whenNotPaused {
         Election storage e = elections[electionId];
         require(block.timestamp >= e.startTime, "Not started");
         require(block.timestamp <= e.endTime, "Ended");
