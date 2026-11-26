@@ -131,7 +131,7 @@ contract Voting {
 
     // ---------------- Views ----------------
 
-    // @return status 0 = upcoming, 1 = active, 2 = ended
+    /// @return status 0 = upcoming, 1 = active, 2 = ended
     function getElection(uint256 electionId)
         external
         view
