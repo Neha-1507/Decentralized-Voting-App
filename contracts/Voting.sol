@@ -30,6 +30,7 @@ contract Voting {
     event CandidateAdded(uint256 indexed electionId, uint256 candidateIndex, string name);
     event VoterRegistered(uint256 indexed electionId, address voter);
     event VoteCast(uint256 indexed electionId, address indexed voter, uint256 candidateIndex);
+    event AdminTransferred(address indexed previousAdmin, address indexed newAdmin);
 
     modifier onlyAdmin() {
         require(msg.sender == admin, "Only admin");
@@ -85,6 +86,12 @@ contract Voting {
                 emit VoterRegistered(electionId, voters[i]);
             }
         }
+    }
+
+    function transferAdmin(address newAdmin) external onlyAdmin {
+        require(newAdmin != address(0), "Zero address");
+        emit AdminTransferred(admin, newAdmin);
+        admin = newAdmin;
     }
 
     // ---------------- Voting ----------------
